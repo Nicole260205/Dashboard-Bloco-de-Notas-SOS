@@ -1,0 +1,58 @@
+import type { Chamado } from "../../types/chamado";
+
+export const chamadosMock: Chamado[] = [
+  {
+    id: 1,
+    nome: "Maria Silva",
+    data: "05/10/2026",
+    hora: "14:32",
+    prioridade: "ALTA",
+    status: "NOVO",
+    responsavel: null,
+  },
+  {
+    id: 2,
+    nome: "Ana Souza",
+    data: "05/10/2026",
+    hora: "14:18",
+    prioridade: "MEDIA",
+    status: "EM_ATENDIMENTO",
+    responsavel: "Carolina Mendes",
+  },
+  {
+    id: 3,
+    nome: "Julia Costa",
+    data: "05/10/2026",
+    hora: "13:51",
+    prioridade: "ALTA",
+    status: "RESOLVIDO",
+    responsavel: "Fernanda Alves",
+  },
+  {
+    id: 4,
+    nome: "Beatriz Oliveira",
+    data: "05/10/2026",
+    hora: "13:27",
+    prioridade: "BAIXA",
+    status: "RESOLVIDO",
+    responsavel: "Carolina Mendes",
+  },
+  {
+    id: 5,
+    nome: "Camila Santos",
+    data: "05/10/2026",
+    hora: "12:59",
+    prioridade: "ALTA",
+    status: "EM_ATENDIMENTO",
+    responsavel: "Fernanda Alves",
+  },
+  {
+    id: 6,
+    nome: "Larissa Almeida",
+    data: "05/10/2026",
+    hora: "12:40",
+    prioridade: "MEDIA",
+    status: "NOVO",
+    responsavel: null,
+  },
+];
