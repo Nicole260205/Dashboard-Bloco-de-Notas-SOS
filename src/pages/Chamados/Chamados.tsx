@@ -6,7 +6,8 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import PriorityBadge from "../../components/PriorityBadge/PriorityBadge";
 
-import { useChamados } from "../../contexts/ChamadosContext";  
+import AnimatedNumber from "../../components/AnimatedNumber/AnimatedNumber";
+import { useChamados } from "../../contexts/ChamadosContext";
 
 function Chamados() {
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ function Chamados() {
           <h3>Chamados recebidos</h3>
 
           <span>
-            {chamadosFiltrados.length}{" "}
+            <AnimatedNumber value={chamadosFiltrados.length} />{" "}
             {chamadosFiltrados.length === 1 ? "chamado" : "chamados"}
           </span>
         </div>

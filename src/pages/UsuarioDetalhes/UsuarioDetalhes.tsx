@@ -3,13 +3,14 @@ import { ArrowLeft, Phone, User, FileText } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
-import { usuariosMock } from "../Usuarios/mockUsuarios";
+import { useChamados } from "../../contexts/ChamadosContext";
 
 function UsuarioDetalhes() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { usuarios } = useChamados();
 
-  const usuario = usuariosMock.find((item) => item.id === Number(id));
+  const usuario = usuarios.find((item) => item.id === Number(id));
 
   if (!usuario) {
     return (

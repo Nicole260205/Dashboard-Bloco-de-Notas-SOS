@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
+import AnimatedNumber from "../../components/AnimatedNumber/AnimatedNumber";
 
 import { useChamados } from "../../contexts/ChamadosContext";
 
@@ -38,19 +39,25 @@ function Atendimentos() {
           <div className="stat-card">
             <span>Em andamento</span>
 
-            <strong>{emAndamento}</strong>
+            <strong>
+              <AnimatedNumber value={emAndamento} />
+            </strong>
           </div>
 
           <div className="stat-card">
             <span>Finalizados</span>
 
-            <strong>{finalizados}</strong>
+            <strong>
+              <AnimatedNumber value={finalizados} />
+            </strong>
           </div>
 
           <div className="stat-card">
             <span>Total de atendimentos</span>
 
-            <strong>{atendimentos.length}</strong>
+            <strong>
+              <AnimatedNumber value={atendimentos.length} />
+            </strong>
           </div>
         </div>
 

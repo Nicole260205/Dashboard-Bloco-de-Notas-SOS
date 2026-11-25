@@ -1,15 +1,36 @@
-import { AlertTriangle, CheckCircle, Clock, FileText } from "lucide-react";
+import { useMemo } from 'react';
+import { AlertTriangle, CheckCircle, Clock, FileText } from 'lucide-react';
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from '../../layouts/DashboardLayout';
+import AnimatedNumber from '../../components/AnimatedNumber/AnimatedNumber';
+import AnimatedBar from '../../components/AnimatedBar/AnimatedBar';
+import { useChamados } from '../../contexts/ChamadosContext';
 
 function Relatorios() {
+  const { chamados, usuarios, dashboard } = useChamados();
+
+  const priorityCounts = useMemo(() => {
+    return {
+      alta: chamados.filter((item) => item.prioridade === 'ALTA').length,
+      media: chamados.filter((item) => item.prioridade === 'MEDIA').length,
+      baixa: chamados.filter((item) => item.prioridade === 'BAIXA').length,
+    };
+  }, [chamados]);
+
+  const stats = dashboard.stats;
+  const slices = dashboard.statusSlices;
+  const total = chamados.length || 1;
+  const resolved = chamados.filter((item) => item.status === 'RESOLVIDO').length;
+  const resolutionRate = Number(
+    ((resolved / total) * 100).toFixed(1)
+  );
+
   return (
     <DashboardLayout>
       <div className="inner-page">
         <div className="page-header">
           <div>
             <h2>Relatórios</h2>
-
             <p>
               Acompanhe indicadores e informações sobre os chamados da central.
             </p>
@@ -17,53 +38,40 @@ function Relatorios() {
         </div>
 
         <div className="report-stats">
-          <div className="report-card">
-            <div className="report-icon">
-              <FileText size={21} />
-            </div>
-
-            <div>
-              <span>Total de chamados</span>
-              <strong>128</strong>
-              <small>Registrados no período</small>
-            </div>
-          </div>
-
-          <div className="report-card">
-            <div className="report-icon report-warning">
-              <AlertTriangle size={21} />
-            </div>
-
-            <div>
-              <span>Chamados urgentes</span>
-              <strong>12</strong>
-              <small>Prioridade alta</small>
-            </div>
-          </div>
-
-          <div className="report-card">
-            <div className="report-icon report-success">
-              <CheckCircle size={21} />
-            </div>
-
-            <div>
-              <span>Chamados resolvidos</span>
-              <strong>109</strong>
-              <small>85,1% do total</small>
-            </div>
-          </div>
-
-          <div className="report-card">
-            <div className="report-icon report-time">
-              <Clock size={21} />
-            </div>
-
-            <div>
-              <span>Em atendimento</span>
-              <strong>7</strong>
-              <small>Atendimentos ativos</small>
-            </div>
-          </div>
+          {stats.map((stat) => {
+            const Icon =
+              stat.id === 'urgent'
+                ? AlertTriangle
+                : stat.id === 'resolved'
+                  ? CheckCircle
+                  : stat.id === 'active'
+                    ? Clock
+                    : FileText;
+            const iconClass =
+              stat.id === 'urgent'
+                ? 'report-icon report-warning'
+                : stat.id === 'resolved'
+                  ? 'report-icon report-success'
+                  : stat.id === 'active'
+                    ? 'report-icon report-time'
+                    : 'report-icon';
+            return (
+              <div key={stat.id} className="report-card">
+                <div className={iconClass}>
+                  <Icon size={21} />
+                </div>
+                <div className="report-card-body">
+                  <div className="report-card-copy">
+                    <span>{stat.label}</span>
+                    <small>{stat.hint}</small>
+                  </div>
+                  <strong>
+                    <AnimatedNumber value={stat.value} />
+                  </strong>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <div className="reports-grid">
@@ -76,47 +84,22 @@ function Relatorios() {
             </div>
 
             <div className="status-report">
-              <div className="report-row">
-                <div>
-                  <span>Novo</span>
-                  <strong>12</strong>
+              {slices.map((slice) => (
+                <div key={slice.label} className="report-row">
+                  <div>
+                    <span>{slice.label}</span>
+                    <strong>
+                      <AnimatedNumber value={slice.value} />
+                    </strong>
+                  </div>
+                  <div className="report-bar">
+                    <AnimatedBar
+                      percent={slice.percent}
+                      className={`report-bar-fill report-${slice.tone}`}
+                    />
+                  </div>
                 </div>
-
-                <div className="report-bar">
-                  <div
-                    className="report-bar-fill report-new"
-                    style={{ width: "9%" }}
-                  />
-                </div>
-              </div>
-
-              <div className="report-row">
-                <div>
-                  <span>Em atendimento</span>
-                  <strong>7</strong>
-                </div>
-
-                <div className="report-bar">
-                  <div
-                    className="report-bar-fill report-progress"
-                    style={{ width: "6%" }}
-                  />
-                </div>
-              </div>
-
-              <div className="report-row">
-                <div>
-                  <span>Resolvidos</span>
-                  <strong>109</strong>
-                </div>
-
-                <div className="report-bar">
-                  <div
-                    className="report-bar-fill report-done"
-                    style={{ width: "85%" }}
-                  />
-                </div>
-              </div>
+              ))}
             </div>
           </section>
 
@@ -131,20 +114,21 @@ function Relatorios() {
             <div className="priority-report">
               <div className="priority-row">
                 <span className="priority-label priority-high">Alta</span>
-
-                <strong>12</strong>
+                <strong>
+                  <AnimatedNumber value={priorityCounts.alta} />
+                </strong>
               </div>
-
               <div className="priority-row">
                 <span className="priority-label priority-medium">Média</span>
-
-                <strong>46</strong>
+                <strong>
+                  <AnimatedNumber value={priorityCounts.media} />
+                </strong>
               </div>
-
               <div className="priority-row">
                 <span className="priority-label priority-low">Baixa</span>
-
-                <strong>70</strong>
+                <strong>
+                  <AnimatedNumber value={priorityCounts.baixa} />
+                </strong>
               </div>
             </div>
           </section>
@@ -154,7 +138,6 @@ function Relatorios() {
           <div className="report-panel-header">
             <div>
               <h3>Resumo operacional</h3>
-
               <p>Visão geral da operação da central no período atual.</p>
             </div>
           </div>
@@ -162,22 +145,35 @@ function Relatorios() {
           <div className="summary-grid">
             <div>
               <span>Taxa de resolução</span>
-              <strong>85,1%</strong>
+              <strong>
+                <AnimatedNumber
+                  value={resolutionRate}
+                  decimals={1}
+                  suffix="%"
+                />
+              </strong>
             </div>
-
             <div>
               <span>Atendimentos ativos</span>
-              <strong>7</strong>
+              <strong>
+                <AnimatedNumber
+                  value={stats.find((item) => item.id === 'active')?.value ?? 0}
+                />
+              </strong>
             </div>
-
             <div>
               <span>Chamados urgentes</span>
-              <strong>12</strong>
+              <strong>
+                <AnimatedNumber
+                  value={stats.find((item) => item.id === 'urgent')?.value ?? 0}
+                />
+              </strong>
             </div>
-
             <div>
               <span>Total de usuárias</span>
-              <strong>6</strong>
+              <strong>
+                <AnimatedNumber value={usuarios.length} />
+              </strong>
             </div>
           </div>
         </section>

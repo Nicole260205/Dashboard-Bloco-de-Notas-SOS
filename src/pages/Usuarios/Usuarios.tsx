@@ -3,14 +3,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
-import { usuariosMock } from "./mockUsuarios";
+import { useChamados } from "../../contexts/ChamadosContext";
 
 function Usuarios() {
   const navigate = useNavigate();
+  const { usuarios } = useChamados();
 
   const [busca, setBusca] = useState("");
 
-  const usuariosFiltradas = usuariosMock.filter((usuario) => {
+  const usuariosFiltradas = usuarios.filter((usuario) => {
     const termo = busca.toLowerCase();
 
     return (

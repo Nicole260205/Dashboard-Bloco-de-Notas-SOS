@@ -67,7 +67,7 @@ function ChamadoDetalhes() {
           {chamado.status === "NOVO" && (
             <button
               className="primary-action"
-              onClick={() => assumirAtendimento(chamado.id)}
+              onClick={() => void assumirAtendimento(chamado.id)}
             >
               Assumir atendimento
             </button>
@@ -76,7 +76,7 @@ function ChamadoDetalhes() {
           {chamado.status === "EM_ATENDIMENTO" && (
             <button
               className="success-action"
-              onClick={() => finalizarAtendimento(chamado.id)}
+              onClick={() => void finalizarAtendimento(chamado.id)}
             >
               Finalizar atendimento
             </button>
@@ -100,7 +100,7 @@ function ChamadoDetalhes() {
 
               <div className="info-item">
                 <span>Telefone</span>
-                <strong>(61) 99999-0000</strong>
+                <strong>{chamado.telefone || 'Não informado'}</strong>
               </div>
             </div>
           </section>
@@ -143,10 +143,11 @@ function ChamadoDetalhes() {
 
               <strong>Localização do chamado</strong>
 
-              <span>Brasília, Distrito Federal</span>
+              <span>{chamado.cidade || 'Localização indisponível'}</span>
 
               <small>
-                Latitude: -15.7939 &nbsp;|&nbsp; Longitude: -47.8828
+                Latitude: {chamado.latitude ?? '—'} &nbsp;|&nbsp; Longitude:{' '}
+                {chamado.longitude ?? '—'}
               </small>
             </div>
           </section>

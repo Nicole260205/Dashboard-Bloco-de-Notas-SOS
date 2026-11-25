@@ -1,11 +1,14 @@
-import AppRoutes from "./routes/AppRoutes";
-import { ChamadosProvider } from "./contexts/ChamadosContext";
+import { AuthProvider } from './contexts/AuthContext';
+import { ChamadosProvider } from './contexts/ChamadosContext';
+import AppRoutes from './routes/AppRoutes';
 
 function App() {
   return (
-    <ChamadosProvider>
-      <AppRoutes />
-    </ChamadosProvider>
+    <AuthProvider>
+      <ChamadosProvider>
+        <AppRoutes />
+      </ChamadosProvider>
+    </AuthProvider>
   );
 }
 
